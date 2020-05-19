@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="API_KEY"/>
+            android:value="@string/api_key"/>
         <activity android:name=".AbsenActivity"></activity>
         <activity
             android:name=".loginActivity"

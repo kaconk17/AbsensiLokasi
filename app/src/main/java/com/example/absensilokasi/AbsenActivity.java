@@ -1,14 +1,16 @@
 package com.example.absensilokasi;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -17,6 +19,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 
 public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallback {
+    AlertDialogManager alert = new AlertDialogManager();
+    LocationManager lm = (LocationManager)this.getSystemService(this.LOCATION_SERVICE);
+    boolean gps_enabled = false;
+    boolean network_enabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,17 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        }catch (Exception ex){}
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        }catch (Exception ex){}
+
+        if (!gps_enabled){
+            new AlertDialog.Builder(this).setMessage();
+        }
     }
     @Override
     public void onMapReady(GoogleMap map) {
@@ -46,6 +63,7 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
                 map.setMyLocationEnabled(true);
             }
         } else {
+           alert.showAlertDialog(AbsenActivity.this,"Warning","GPS Belum diaktifkan", false);
             //buildGoogleApiClient();
             map.setMyLocationEnabled(true);
         }
