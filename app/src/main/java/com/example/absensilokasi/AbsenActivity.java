@@ -20,9 +20,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallback {
     AlertDialogManager alert = new AlertDialogManager();
-    LocationManager lm = (LocationManager)this.getSystemService(this.LOCATION_SERVICE);
-    boolean gps_enabled = false;
-    boolean network_enabled = false;
+   
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +31,8 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        }catch (Exception ex){}
-        try {
-            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        }catch (Exception ex){}
 
-        if (!gps_enabled){
-            new AlertDialog.Builder(this).setMessage();
-        }
+
     }
     @Override
     public void onMapReady(GoogleMap map) {
