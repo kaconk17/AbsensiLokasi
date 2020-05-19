@@ -27,6 +27,7 @@
                 android:layout_height="wrap_content"/>
             <TextView
                 android:layout_below="@+id/txtdashboard"
+                android:id="@+id/txtuser"
                 android:layout_marginTop="6dp"
                 android:text="User Name"
                 android:textSize="14sp"
@@ -53,6 +54,7 @@
             android:layout_height="wrap_content">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/absen_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"

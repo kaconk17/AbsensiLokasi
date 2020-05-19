@@ -1,14 +1,18 @@
 package com.example.absensilokasi;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 
-
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import java.util.HashMap;
 
@@ -17,6 +21,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity {
     SessionManager session;
     CircleImageView imgProfile;
+    TextView user_name;
+    CardView btn_absesn;
     AlertDialogManager alert = new AlertDialogManager();
 Boolean login;
     @Override
@@ -26,13 +32,14 @@ Boolean login;
 
         session = new SessionManager(getApplicationContext());
         session.checkLogin();
-
+        btn_absesn = findViewById(R.id.absen_btn);
 
         HashMap<String, String> user = session.getUserDetails();
 
         String name = user.get(SessionManager.KEY_NAME);
         String email = user.get(SessionManager.KEY_EMAIL);
-
+        user_name = findViewById(R.id.txtuser);
+        user_name.setText(name);
         imgProfile = findViewById(R.id.profile_pic);
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +52,22 @@ Boolean login;
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()){
                             case R.id.logout:
-                                alert.showAlertDialog(MainActivity.this, "Logout !", "Anda logout", false);
+                                //alert.showAlertDialog(MainActivity.this, "Logout !", "Anda logout", false);
+                                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which){
+                                            case DialogInterface.BUTTON_POSITIVE:
+                                                    session.logoutUser();
+                                                break;
+
+                                                case DialogInterface.BUTTON_NEGATIVE:
+                                                    break;
+                                        }
+                                    }
+                                };
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                builder.setTitle("logout").setMessage("Apakah anda akan Logout ?").setPositiveButton("YES", dialogClickListener).setNegativeButton("NO", dialogClickListener).show();
                                 return true;
                             case R.id.one:
                                 alert.showAlertDialog(MainActivity.this, "One !", "Anda logout", true);
@@ -58,6 +80,14 @@ Boolean login;
                 });
                 popup.show();
 
+            }
+        });
+
+        btn_absesn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),AbsenActivity.class);
+                startActivity(i);
             }
         });
 
