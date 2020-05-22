@@ -15,11 +15,15 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/api_key"/>
-        <activity android:name=".AbsenActivity"></activity>
+
+        <activity
+            android:name=".AbsenActivity"
+            android:label="Absensi"
+            android:theme="@style/AppMenu" />
         <activity
             android:name=".loginActivity"
             android:label="User Login"
-            android:theme="@style/AppTheme.Dark"></activity>
+            android:theme="@style/AppTheme.Dark" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

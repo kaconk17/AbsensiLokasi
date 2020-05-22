@@ -97,8 +97,8 @@ Boolean login;
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                                 builder.setTitle("logout").setMessage("Apakah anda akan Logout ?").setPositiveButton("YES", dialogClickListener).setNegativeButton("NO", dialogClickListener).show();
                                 return true;
-                            case R.id.one:
-                                alert.showAlertDialog(MainActivity.this, "One !", "Anda logout", true);
+                            case R.id.profile:
+                                alert.showAlertDialog(MainActivity.this, "One !", "Profile", true);
                                 return true;
                             default:
                                 return false;

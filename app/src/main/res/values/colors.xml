@@ -3,7 +3,7 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="primary">#2196F3</color>
+    <color name="primary">#0095FF</color>
     <color name="primary_dark">#1C84D6</color>
     <color name="primary_darker">#1173C1</color>
     <color name="accent">#FFFFFF</color>
@@ -17,4 +17,5 @@
     <color name="base">#AAAAAA</color>
     <color name="iron">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
+    <color name="transparan">#00FFFFFF</color>
 </resources>
