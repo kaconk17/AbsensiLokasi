@@ -30,18 +30,18 @@
             android:layout_marginTop="20dp"
             app:cardCornerRadius="20dp"
             android:gravity="center"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
 
             app:cardElevation="6dp"
             android:layout_width="match_parent"
-            android:layout_height="380dp">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:gravity="center"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <ImageButton
                     android:id="@+id/btn_absen"
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:text="Kirim Absen"/>
                 <ListView
-
+                    android:id="@+id/list_absen"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">

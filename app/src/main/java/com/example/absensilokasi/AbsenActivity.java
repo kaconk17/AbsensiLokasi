@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ListView;
 
 
 import com.google.android.gms.common.ConnectionResult;
@@ -38,6 +39,13 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     ImageButton btn_absen;
+    ListView absen_list;
+    String jamlist[] = {"08:00","09:30", "15:45"};
+
+    String tanggal[] = {"2020-05-24","2020-05-24","2020-05-24"};
+    String alamat[] = {"Bangil","Bangil","Sidoarjo"};
+    String status[] = {"success", "success", "failed"};
+    int icons[] ={R.drawable.icon_main,R.drawable.icon_error};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +58,9 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        absen_list = findViewById(R.id.list_absen);
+        CustomAdapter customAdapter = new CustomAdapter(this, jamlist, tanggal, alamat, status);
+        absen_list.setAdapter(customAdapter);
 
     btn_absen = findViewById(R.id.btn_absen);
 
