@@ -17,6 +17,8 @@ public class SessionManager {
     private static final String IS_LOGIN = "IsLoggedin";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
+    public static final String KEY_TOKEN = "token";
+    public static final String KEY_ID = "id";
 
 
     //construktor
@@ -29,7 +31,7 @@ public class SessionManager {
 
     //create login session
 
-    public void createLoginSession(String name, String email){
+    public void createLoginSession(String name, String email, String token, String id){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
@@ -38,6 +40,10 @@ public class SessionManager {
 
         // Storing email in pref
         editor.putString(KEY_EMAIL, email);
+
+        editor.putString(KEY_TOKEN, token);
+
+        editor.putString(KEY_ID, id);
 
         // commit changes
         editor.commit();
@@ -51,6 +57,10 @@ public class SessionManager {
 
         // user email id
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
+
+        user.put(KEY_TOKEN, pref.getString(KEY_TOKEN, null));
+
+        user.put(KEY_ID, pref.getString(KEY_ID, null));
 
         // return user
         return user;
