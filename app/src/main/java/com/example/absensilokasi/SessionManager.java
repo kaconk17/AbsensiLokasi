@@ -19,6 +19,10 @@ public class SessionManager {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_TOKEN = "token";
     public static final String KEY_ID = "id";
+    public static final String KEY_LAT = "lat";
+    public static final String KEY_LNG = "lng";
+
+
 
 
     //construktor
@@ -31,7 +35,7 @@ public class SessionManager {
 
     //create login session
 
-    public void createLoginSession(String name, String email, String token, String id){
+    public void createLoginSession(String name, String email, String token, String id, String lat, String lng){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
@@ -44,6 +48,13 @@ public class SessionManager {
         editor.putString(KEY_TOKEN, token);
 
         editor.putString(KEY_ID, id);
+
+        editor.putString(KEY_LAT, lat);
+
+        editor.putString(KEY_LNG, lng);
+
+
+
 
         // commit changes
         editor.commit();
@@ -61,6 +72,10 @@ public class SessionManager {
         user.put(KEY_TOKEN, pref.getString(KEY_TOKEN, null));
 
         user.put(KEY_ID, pref.getString(KEY_ID, null));
+
+        user.put(KEY_LAT, pref.getString(KEY_LAT, null));
+
+        user.put(KEY_LNG, pref.getString(KEY_LNG, null));
 
         // return user
         return user;

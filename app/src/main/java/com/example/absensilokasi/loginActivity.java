@@ -71,10 +71,18 @@ public class loginActivity extends AppCompatActivity {
                                 if (stat){
                                     JSONObject user = new JSONObject(jsonObject.getString("user"));
                                     String token = jsonObject.getString("token");
-                                    session.createLoginSession(user.getString("nama"), user.getString("email"), token, user.getString("id"));
-                                    Intent i = new Intent(getApplicationContext(),MainActivity.class);
-                                    startActivity(i);
-                                    finish();
+
+                                   if (user.getString("lat").equals(JSONObject.NULL)){
+                                       alert.showAlertDialog(loginActivity.this, "Login !", "Data lokasi belum ada!", false);
+                                   }else{
+                                       String slat = String.valueOf(user.getDouble("lat"));
+                                       String slng = String.valueOf(user.getDouble("long"));
+                                       session.createLoginSession(user.getString("nama"), user.getString("email"), token, user.getString("id"), slat,slng);
+                                       Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                                       startActivity(i);
+                                       finish();
+                                   }
+
                                 }else {
                                     alert.showAlertDialog(loginActivity.this, "Login Gagal !", mess, false);
                                 }

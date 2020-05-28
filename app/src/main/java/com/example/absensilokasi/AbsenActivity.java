@@ -11,9 +11,12 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -40,10 +43,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -59,20 +67,25 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
     ListView absen_list;
     AlertDialogManager alert = new AlertDialogManager();
     TextView Tjarak;
-    Double lathome = -7.631651880413749;
-    Double lnghome = 112.76422067042313;
+    //Double lathome = -7.631651880413749;
+    //Double lnghome = 112.76422067042313;
+    Double lathome = 0.0;
+    Double lnghome = 0.0;
+
     Double curLat, curLong;
     private static final String TAG = AbsenActivity.class.getSimpleName();
     private static final String url_absen = "https://absensilokasi.azurewebsites.net/api/absen/create";
+    private static final String url_get = "https://absensilokasi.azurewebsites.net/api/absen/getabsen/";
     private ProgressDialog pDialog;
-
+    ArrayList<AbsenModel> listAbsen;
+    private ListAdapter listAdapter;
+/*
     String jamlist[] = {"08:00","09:30", "15:45"};
-
-    String tanggal[] = {"2020-05-24","2020-05-24","2020-05-24"};
+    String tanggal[]= {"2020-05-24","2020-05-24","2020-05-24"};
     String alamat[] = {"Bangil","Bangil","Sidoarjo"};
     String status[] = {"success", "success", "failed"};
     int icons[] ={R.drawable.icon_main,R.drawable.icon_error};
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,23 +94,34 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
+        session = new SessionManager(getApplicationContext());
+        absen_list = findViewById(R.id.list_absen);
+        Tjarak = findViewById(R.id.jarak);
+        btn_absen = findViewById(R.id.btn_absen);
+        final HashMap<String,String> user = session.getUserDetails();
+
+        try {
+            lathome = Double.parseDouble(user.get(SessionManager.KEY_LAT));
+            lnghome = Double.parseDouble(user.get(SessionManager.KEY_LNG));
+        }catch (NumberFormatException e){
+            e.printStackTrace();
+        }
+
+        loadAbsen(user.get(SessionManager.KEY_ID),user.get(SessionManager.KEY_TOKEN));
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        absen_list = findViewById(R.id.list_absen);
-        Tjarak = findViewById(R.id.jarak);
-        CustomAdapter customAdapter = new CustomAdapter(this, jamlist, tanggal, alamat, status);
-        absen_list.setAdapter(customAdapter);
 
 
-    btn_absen = findViewById(R.id.btn_absen);
+
+
+
+
 
     btn_absen.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Double lat, lng;
-                   lat = mLastLocation.getLatitude();
-                   lng = mLastLocation.getLongitude();
+
             final String strlat, strlng;
                    strlat = curLat.toString();
                    strlng = curLong.toString();
@@ -106,8 +130,9 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which){
                         case DialogInterface.BUTTON_POSITIVE:
-                            kirimAbsen(strlat,strlng);
+                            kirimAbsen(strlat,strlng,user.get(SessionManager.KEY_TOKEN), user.get(SessionManager.KEY_ID));
                             //Toast.makeText(AbsenActivity.this,"Lat = "+ strlat+" & Long = "+ strlng,Toast.LENGTH_LONG).show();
+                            //getAddress(curLat,curLong);
                             break;
 
                         case DialogInterface.BUTTON_NEGATIVE:
@@ -214,26 +239,100 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-    public void kirimAbsen(final String slat, final String slng){
+    public void loadAbsen(String id, final String utoken){
+        pDialog = new ProgressDialog(AbsenActivity.this);
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        String uri = String.format("https://absensilokasi.azurewebsites.net/api/absen/getabsen/"+id+"?c_token=%1$s",utoken);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, uri, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //pDialog.hide();
+                pDialog.dismiss();
+                try {
+                    JSONObject obj = new JSONObject(response);
+                    Boolean stat = obj.getBoolean("success");
+
+                    if (stat){
+                        JSONArray jsonArray = obj.getJSONArray("data");
+                        listAbsen = new ArrayList<>();
+                        for (int i =0 ;i < jsonArray.length(); i++){
+                            AbsenModel absenModel = new AbsenModel();
+
+                            JSONObject dataobj = jsonArray.getJSONObject(i);
+
+                            absenModel.setId(dataobj.getString("id_absensi"));
+                            absenModel.setJam(dataobj.getString("jam"));
+                            absenModel.setTanggal(dataobj.getString("tanggal"));
+                            absenModel.setStatus(dataobj.getString("status"));
+                           absenModel.setLat(dataobj.getDouble("lat"));
+                           absenModel.setLng(dataobj.getDouble("long"));
+                        listAbsen.add(absenModel);
+                        }
+                        setupListview();
+                    }else {
+                        String cod = obj.getString("code");
+                        String mess = obj.getString("message");
+                        if (cod.equals("token")){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(AbsenActivity.this);
+                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which){
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                            session.logoutUser();
+                                    }
+                                }
+                            };
+                            builder.setTitle("Absen").setMessage("Sesi Anda telah berakhir !").setPositiveButton("OK", dialogClickListener).show();
+                        }else {
+                            Toast.makeText(AbsenActivity.this,mess,Toast.LENGTH_LONG).show();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(AbsenActivity.this,"Network Error",Toast.LENGTH_LONG).show();
+                error.printStackTrace();
+            }
+        });
+
+        AppSingleton.getInstance(AbsenActivity.this).addToRequestQueue(stringRequest,TAG);
+    }
+    public void kirimAbsen(final String slat, final String slng, final String ctoken, final String cid){
         pDialog = new ProgressDialog(AbsenActivity.this);
         pDialog.setMessage("Sending...");
         pDialog.show();
-        session = new SessionManager(getApplicationContext());
-        final HashMap<String,String> user = session.getUserDetails();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url_absen, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                pDialog.hide();
+                //pDialog.hide();
+                pDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     Boolean stat = jsonObject.getBoolean("success");
                     String mess = jsonObject.getString("message");
                     if (stat){
-
-                        alert.showAlertDialog(AbsenActivity.this, "Absen", mess, true);
+                        AlertDialog.Builder ab = new AlertDialog.Builder(AbsenActivity.this);
+                        DialogInterface.OnClickListener dialogClick = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which){
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        loadAbsen(cid,ctoken);
+                                        break;
+                                }
+                            }
+                        };
+                        ab.setTitle("Absen").setMessage(mess).setPositiveButton("OK", dialogClick).show();
                     }else {
                         String cd = jsonObject.getString("code");
-                        //alert.showAlertDialog(AbsenActivity.this, "Absen", mess, false);
+
                         if (cd.equals("token")){
                             AlertDialog.Builder builder = new AlertDialog.Builder(AbsenActivity.this);
                             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -242,6 +341,7 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
                                     switch (which){
                                         case DialogInterface.BUTTON_POSITIVE:
                                             session.logoutUser();
+                                            break;
                                     }
                                 }
                             };
@@ -264,13 +364,17 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params =  new HashMap<String, String>();
-                params.put("c_token",user.get(SessionManager.KEY_TOKEN));
+                params.put("c_token",ctoken);
                 params.put("lat", slat);
                 params.put("long", slng);
                 return params;
             }
         };
         AppSingleton.getInstance(AbsenActivity.this).addToRequestQueue(stringRequest,TAG);
+    }
+    private void setupListview(){
+        listAdapter = new ListAdapter(AbsenActivity.this,listAbsen);
+        absen_list.setAdapter(listAdapter);
     }
     private double distance(double lat1, double lon1, double lat2, double lon2) {
         double theta = lon1 - lon2;
@@ -292,4 +396,6 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
+
+   
 }
