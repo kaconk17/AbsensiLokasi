@@ -71,17 +71,25 @@ public class loginActivity extends AppCompatActivity {
                                 if (stat){
                                     JSONObject user = new JSONObject(jsonObject.getString("user"));
                                     String token = jsonObject.getString("token");
+                                    String rad = String.valueOf(jsonObject.getDouble("radius"));
+                                    //Toast.makeText(loginActivity.this,user.getString("lat"),Toast.LENGTH_LONG).show();
 
-                                   if (user.getString("lat").equals(JSONObject.NULL)){
-                                       alert.showAlertDialog(loginActivity.this, "Login !", "Data lokasi belum ada!", false);
+                                   if (user.getString("lat").equals("null") || user.getString("lat").equals("") || user.getString("long").equals("null") || user.getString("long").equals("")){
+                                       //alert.showAlertDialog(loginActivity.this, "Login !", "Data lokasi belum ada!", false);
+                                       session.createLoginSession(user.getString("nama"), user.getString("email"), token, user.getString("id"), null,null, rad);
+                                       Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
+                                       startActivity(intent);
+                                       finish();
                                    }else{
                                        String slat = String.valueOf(user.getDouble("lat"));
                                        String slng = String.valueOf(user.getDouble("long"));
-                                       session.createLoginSession(user.getString("nama"), user.getString("email"), token, user.getString("id"), slat,slng);
+                                       session.createLoginSession(user.getString("nama"), user.getString("email"), token, user.getString("id"), slat,slng, rad );
                                        Intent i = new Intent(getApplicationContext(),MainActivity.class);
                                        startActivity(i);
                                        finish();
                                    }
+
+
 
                                 }else {
                                     alert.showAlertDialog(loginActivity.this, "Login Gagal !", mess, false);

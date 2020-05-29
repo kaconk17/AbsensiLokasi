@@ -21,6 +21,7 @@ public class SessionManager {
     public static final String KEY_ID = "id";
     public static final String KEY_LAT = "lat";
     public static final String KEY_LNG = "lng";
+    public static final String KEY_RAD = "rad";
 
 
 
@@ -35,7 +36,7 @@ public class SessionManager {
 
     //create login session
 
-    public void createLoginSession(String name, String email, String token, String id, String lat, String lng){
+    public void createLoginSession(String name, String email, String token, String id, String lat, String lng, String rad){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
@@ -53,6 +54,7 @@ public class SessionManager {
 
         editor.putString(KEY_LNG, lng);
 
+        editor.putString(KEY_RAD, rad);
 
 
 
@@ -60,6 +62,11 @@ public class SessionManager {
         editor.commit();
     }
 
+    public void updateLokasi(String lat, String lng){
+        editor.putString(KEY_LAT, lat);
+        editor.putString(KEY_LNG, lng);
+        editor.apply();
+    }
     //get stored session data
     public HashMap<String, String> getUserDetails(){
         HashMap<String, String> user = new HashMap<String, String>();
@@ -77,6 +84,7 @@ public class SessionManager {
 
         user.put(KEY_LNG, pref.getString(KEY_LNG, null));
 
+        user.put(KEY_RAD, pref.getString(KEY_RAD, null));
         // return user
         return user;
     }
@@ -96,6 +104,15 @@ public class SessionManager {
 
             // Staring Login Activity
             _context.startActivity(i);
+        }else {
+            final HashMap<String,String> user = this.getUserDetails();
+            String mlat = user.get(SessionManager.KEY_LAT);
+            String mlng = user.get(SessionManager.KEY_LNG);
+            if (mlat == null || mlat.equals("") || mlng == null || mlng.equals("")){
+                Intent i = new Intent(_context, RegisterActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                _context.startActivity(i);
+            }
         }
 
     }

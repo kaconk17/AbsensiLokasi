@@ -1,6 +1,7 @@
 package com.example.absensilokasi;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
@@ -75,14 +76,18 @@ public class ListAdapter extends BaseAdapter {
         String s = datalist.get(position).getStatus();
 
         if (s.equals("OK")){
-            holder.imv.setImageResource(R.drawable.icon_main);
+            holder.imv.setImageResource(R.drawable.check_solid);
+            holder.tstatus.setText("Success");
+            holder.tstatus.setTextColor(Color.parseColor("#3BE23B"));
         }else {
             holder.imv.setImageResource(R.drawable.icon_error);
+            holder.tstatus.setText("Diluar Area");
+            holder.tstatus.setTextColor(Color.parseColor("#ED2C2C"));
         }
         String mlat = getAddress(datalist.get(position).getLat(),datalist.get(position).getLng());
         holder.tjam.setText(datalist.get(position).getJam());
         holder.ttanggal.setText(datalist.get(position).getTanggal());
-        holder.tstatus.setText(datalist.get(position).getStatus());
+
         holder.talamat.setText(mlat);
 
         return convertView;

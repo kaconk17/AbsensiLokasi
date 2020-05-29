@@ -79,13 +79,7 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
     private ProgressDialog pDialog;
     ArrayList<AbsenModel> listAbsen;
     private ListAdapter listAdapter;
-/*
-    String jamlist[] = {"08:00","09:30", "15:45"};
-    String tanggal[]= {"2020-05-24","2020-05-24","2020-05-24"};
-    String alamat[] = {"Bangil","Bangil","Sidoarjo"};
-    String status[] = {"success", "success", "failed"};
-    int icons[] ={R.drawable.icon_main,R.drawable.icon_error};
-*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -203,6 +197,7 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
         Double jarak = distance(lathome,lnghome,curLat,curLong);
         String strjarak = String.format("%.2f",jarak);
+
         Tjarak.setText("Jarak dari Rumah = "+ strjarak +" Km");
         //stop location updates
         /*
@@ -397,5 +392,5 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
         return (rad * 180.0 / Math.PI);
     }
 
-   
+
 }

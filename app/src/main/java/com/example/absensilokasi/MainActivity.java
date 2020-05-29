@@ -42,7 +42,7 @@ Boolean login;
         HashMap<String, String> user = session.getUserDetails();
 
         String name = user.get(SessionManager.KEY_NAME);
-        String email = user.get(SessionManager.KEY_EMAIL);
+        //String email = user.get(SessionManager.KEY_EMAIL);
         user_name = findViewById(R.id.txtuser);
         user_name.setText(name);
         // Here, thisActivity is the current activity

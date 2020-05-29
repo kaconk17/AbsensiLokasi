@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AbsensiLokasi</string>
+    <string name="reg_paragraph">Tentukan lokasi tempat tinggal Anda saat ini</string>
+    <string name="base_url">https://absensilokasi.azurewebsites.net/api/</string>
 </resources>

@@ -42,6 +42,7 @@
         android:layout_marginLeft="40dp"
         android:gravity="center_vertical"
         android:layout_toRightOf="@id/firstLine"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"/>
     <TextView
