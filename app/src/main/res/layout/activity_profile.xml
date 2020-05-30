@@ -1,9 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    tools:context=".ProfileActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@drawable/bg_apps"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_pic"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/profile"
+                android:layout_width="82dp"
+                android:layout_height="82dp"/>
+        </RelativeLayout>
+        <androidx.cardview.widget.CardView
+            android:layout_marginTop="30dp"
+            app:cardCornerRadius="20dp"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
+            app:cardElevation="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/txt_name"
+            android:layout_marginTop="10dp"
+            android:text="User"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="24dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+            <ScrollView
+               android:layout_marginTop="50dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:textSize="12dp"
+                        android:text="NIK"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/txt_nik"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:text="nik"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:text="Email"
+                        android:textSize="12dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/txt_email"
+                        android:text="email"
+                        android:textSize="16dp"
+                        android:textColor="@color/black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <RelativeLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/e_label"
+
+                            android:textSize="12dp"
+                            android:text="Tanggal Lahir"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:textSize="16dp"
+                            android:textColor="@color/black"
+                            android:id="@+id/txt_tgl"
+                            android:layout_below="@+id/e_label"
+                            android:text="tanggal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/l_kel"
+                            android:textSize="12dp"
+                            android:layout_alignParentRight="true"
+
+                            android:text="Jenis Kelamin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/txt_jenis"
+                            android:textSize="16dp"
+                            android:textColor="@color/black"
+                            android:layout_below="@+id/l_kel"
+                           android:layout_alignParentRight="true"
+
+                            android:text="jenis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/l_no"
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@+id/txt_tgl"
+                            android:text="No. Telepon"
+                            android:textSize="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/txt_no"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
+                            android:layout_below="@+id/l_no"
+                            android:text="00000"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/l_dep"
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@+id/txt_no"
+                            android:text="Departemen"
+                            android:textSize="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/txt_dept"
+                            android:layout_below="@+id/l_dep"
+                            android:text="dept"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/l_jab"
+                            android:textSize="12dp"
+                            android:layout_marginLeft="185dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@+id/txt_no"
+                            android:layout_alignParentRight="true"
+                            android:text="Jabatan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/txt_jabatan"
+                            android:textSize="16dp"
+                            android:textColor="@color/black"
+                            android:text="jabatan"
+                           android:layout_alignParentRight="true"
+
+                            android:layout_below="@+id/l_jab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+
+                    </RelativeLayout>
+                    <TextView
+                        android:textSize="12dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:text="Alamat Tinggal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/txt_alamat"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:layout_gravity="center"
+                        android:text="alamat lengkap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center"
+                        android:textSize="12dp"
+                        android:text="Koordinat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/txt_kor"
+
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:layout_gravity="center"
+                        android:textSize="16dp"
+                        android:text="00000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/txt_long"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"
+                        android:text="long"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+
+                </LinearLayout>
+
+
+            </ScrollView>
+
+
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</RelativeLayout>

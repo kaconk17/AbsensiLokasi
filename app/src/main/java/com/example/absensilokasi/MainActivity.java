@@ -27,25 +27,13 @@ public class MainActivity extends AppCompatActivity {
     SessionManager session;
     CircleImageView imgProfile;
     TextView user_name;
-    CardView btn_absesn;
+    CardView btn_absesn, btn_hist;
     AlertDialogManager alert = new AlertDialogManager();
 Boolean login;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        session = new SessionManager(getApplicationContext());
-        session.checkLogin();
-        btn_absesn = findViewById(R.id.absen_btn);
-
-        HashMap<String, String> user = session.getUserDetails();
-
-        String name = user.get(SessionManager.KEY_NAME);
-        //String email = user.get(SessionManager.KEY_EMAIL);
-        user_name = findViewById(R.id.txtuser);
-        user_name.setText(name);
-        // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -65,6 +53,18 @@ Boolean login;
             // Permission has already been granted
             Toast.makeText(this, "Izin Lokasi diberikan", Toast.LENGTH_SHORT).show();
         }
+        session = new SessionManager(getApplicationContext());
+        session.checkLogin();
+        btn_absesn = findViewById(R.id.absen_btn);
+        btn_hist = findViewById(R.id.btn_history);
+        HashMap<String, String> user = session.getUserDetails();
+
+        String name = user.get(SessionManager.KEY_NAME);
+        //String email = user.get(SessionManager.KEY_EMAIL);
+        user_name = findViewById(R.id.txtuser);
+        user_name.setText(name);
+        // Here, thisActivity is the current activity
+
 
 
 
@@ -98,7 +98,9 @@ Boolean login;
                                 builder.setTitle("logout").setMessage("Apakah anda akan Logout ?").setPositiveButton("YES", dialogClickListener).setNegativeButton("NO", dialogClickListener).show();
                                 return true;
                             case R.id.profile:
-                                alert.showAlertDialog(MainActivity.this, "One !", "Profile", true);
+                                //alert.showAlertDialog(MainActivity.this, "One !", "Profile", true);
+                                Intent i = new Intent(getApplicationContext(),ProfileActivity.class);
+                                startActivity(i);
                                 return true;
                             default:
                                 return false;
@@ -115,6 +117,14 @@ Boolean login;
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(),AbsenActivity.class);
+                startActivity(i);
+            }
+        });
+
+        btn_hist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),HistoryActivity.class);
                 startActivity(i);
             }
         });

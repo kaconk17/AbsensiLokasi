@@ -13,8 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HistoryActivity"></activity>
-        <activity android:name=".ProfileActivity" />
+        <activity
+            android:theme="@style/AppMenu"
+            android:label="History"
+            android:name=".HistoryActivity" />
+        <activity android:name=".ProfileActivity"
+            android:label="Profile"
+            android:theme="@style/AppMenu"/>
         <activity
             android:name=".RegisterActivity"
             android:label="Registrasi Alamat" />
