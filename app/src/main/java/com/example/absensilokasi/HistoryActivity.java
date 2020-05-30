@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity implements RecycleAdapter.OnListListener {
     EditText tgl_awal, tgl_akhir;
     DatePickerDialog picker;
     ImageButton btn_cari;
@@ -203,7 +203,7 @@ public class HistoryActivity extends AppCompatActivity {
         AppSingleton.getInstance(HistoryActivity.this).addToRequestQueue(stringRequest,TAG);
     }
     private void setupList(){
-        adapter = new RecycleAdapter(HistoryActivity.this,absenList);
+        adapter = new RecycleAdapter(HistoryActivity.this,absenList, this);
         linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         dividerItemDecoration = new DividerItemDecoration(mlist.getContext(), linearLayoutManager.getOrientation());
@@ -216,5 +216,12 @@ public class HistoryActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp(){
         finish();
         return true;
+    }
+
+    @Override
+    public void onListClick(int position) {
+        //String t= String.valueOf(position);
+        AbsenModel absenModel= absenList.get(position);
+        Toast.makeText(HistoryActivity.this,absenModel.getId(),Toast.LENGTH_LONG).show();
     }
 }
