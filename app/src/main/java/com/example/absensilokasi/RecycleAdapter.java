@@ -30,7 +30,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
         this.context = context;
         this.datalist= datalist;
         this.mOnlistlistener = onListListener;
-        selectedItem =0;
+        selectedItem =-1;
 
     }
     @NonNull

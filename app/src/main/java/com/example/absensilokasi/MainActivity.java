@@ -26,7 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity {
     SessionManager session;
     CircleImageView imgProfile;
-    TextView user_name;
+    TextView user_name,uemail;
     CardView btn_absesn, btn_hist;
     AlertDialogManager alert = new AlertDialogManager();
 Boolean login;
@@ -60,13 +60,11 @@ Boolean login;
         HashMap<String, String> user = session.getUserDetails();
 
         String name = user.get(SessionManager.KEY_NAME);
-        //String email = user.get(SessionManager.KEY_EMAIL);
+        String email = user.get(SessionManager.KEY_EMAIL);
         user_name = findViewById(R.id.txtuser);
+        uemail = findViewById(R.id.txtemail);
         user_name.setText(name);
-        // Here, thisActivity is the current activity
-
-
-
+        uemail.setText(email);
 
         imgProfile = findViewById(R.id.profile_pic);
         imgProfile.setOnClickListener(new View.OnClickListener() {

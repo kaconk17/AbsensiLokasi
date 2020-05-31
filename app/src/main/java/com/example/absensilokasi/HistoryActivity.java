@@ -2,14 +2,18 @@ package com.example.absensilokasi;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
@@ -21,6 +25,16 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,11 +46,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 
-public class HistoryActivity extends AppCompatActivity implements RecycleAdapter.OnListListener {
+public class HistoryActivity extends AppCompatActivity implements RecycleAdapter.OnListListener, OnMapReadyCallback {
     EditText tgl_awal, tgl_akhir;
     DatePickerDialog picker;
     ImageButton btn_cari;
     SessionManager session;
+    private GoogleMap mMap;
+    Marker mCurrLocationMarker;
+    GoogleApiClient mGoogleApiClient;
     private LinearLayoutManager linearLayoutManager;
     private DividerItemDecoration dividerItemDecoration;
     private RecyclerView mlist;
@@ -62,6 +79,10 @@ public class HistoryActivity extends AppCompatActivity implements RecycleAdapter
         final HashMap<String,String> user = session.getUserDetails();
         id = user.get(SessionManager.KEY_ID);
         token = user.get(SessionManager.KEY_TOKEN);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         tgl_awal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +157,7 @@ public class HistoryActivity extends AppCompatActivity implements RecycleAdapter
             }
         });
     }
+
 
     private void getData(String cId, String cToken, String Tglawal, String Tglakhir){
         pDialog = new ProgressDialog(HistoryActivity.this);
@@ -220,8 +242,40 @@ public class HistoryActivity extends AppCompatActivity implements RecycleAdapter
 
     @Override
     public void onListClick(int position) {
-        //String t= String.valueOf(position);
+
         AbsenModel absenModel= absenList.get(position);
-        Toast.makeText(HistoryActivity.this,absenModel.getId(),Toast.LENGTH_LONG).show();
+        String t= absenModel.getTanggal()+", "+absenModel.getJam();
+        //Toast.makeText(HistoryActivity.this,absenModel.getId(),Toast.LENGTH_LONG).show();
+        showMap(absenModel.getLat(), absenModel.getLng(), t);
     }
+
+    private void showMap(Double mlat, Double mlng, String tgl){
+
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
+        }
+
+        //Place current location marker
+        LatLng latLng = new LatLng(mlat, mlng);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title(tgl);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        mCurrLocationMarker = mMap.addMarker(markerOptions);
+
+        //move map camera
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        //LatLng lokasi = new LatLng(-7.631651880413749,112.76422067042313);
+        mMap.setMyLocationEnabled(false);
+    }
+
+
 }

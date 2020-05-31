@@ -11,6 +11,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -72,7 +73,7 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
     //Double lnghome = 112.76422067042313;
     Double lathome = 0.0;
     Double lnghome = 0.0;
-
+    Double rad= 0.0;
     Double curLat, curLong;
     private static final String TAG = AbsenActivity.class.getSimpleName();
     private static final String url_absen = "https://absensilokasi.azurewebsites.net/api/absen/create";
@@ -96,6 +97,7 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
         final HashMap<String,String> user = session.getUserDetails();
 
         try {
+            rad = Double.parseDouble(user.get(SessionManager.KEY_RAD));
             lathome = Double.parseDouble(user.get(SessionManager.KEY_LAT));
             lnghome = Double.parseDouble(user.get(SessionManager.KEY_LNG));
         }catch (NumberFormatException e){
@@ -198,8 +200,14 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
         Double jarak = distance(lathome,lnghome,curLat,curLong);
         String strjarak = String.format("%.2f",jarak);
+        if (jarak > rad){
+            Tjarak.setText("Jarak dari Rumah = "+ strjarak +" Km");
+            Tjarak.setTextColor(Color.parseColor("#FFFF0000"));
+        }else {
+            Tjarak.setText("Jarak dari Rumah = "+ strjarak +" Km");
+            Tjarak.setTextColor(Color.parseColor("#000000"));
+        }
 
-        Tjarak.setText("Jarak dari Rumah = "+ strjarak +" Km");
         //stop location updates
         /*
         if (mGoogleApiClient != null) {
