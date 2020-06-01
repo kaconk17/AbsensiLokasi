@@ -23,6 +23,9 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+//TODO: notifikasi = https://www.tutorialspoint.com/how-to-schedule-local-notifications-in-android
+//TODO: simpan device ID sebaiagai identitas tambahan token
+
 public class MainActivity extends AppCompatActivity {
     SessionManager session;
     CircleImageView imgProfile;
