@@ -300,11 +300,14 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (pDialog != null){
+                    pDialog.dismiss();
+                }
                 Toast.makeText(AbsenActivity.this,"Network Error",Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         });
-
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppSingleton.getInstance(AbsenActivity.this).addToRequestQueue(stringRequest,TAG);
     }
     public void kirimAbsen(final String slat, final String slng, final String ctoken, final String cid){
@@ -391,7 +394,7 @@ public class AbsenActivity extends AppCompatActivity implements OnMapReadyCallba
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
-        return (dist);
+        return (dist*1.60934);
     }
 
     private double deg2rad(double deg) {

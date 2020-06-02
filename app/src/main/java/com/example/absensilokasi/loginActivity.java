@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -116,6 +117,7 @@ public class loginActivity extends AppCompatActivity {
                             return params;
                         }
                     } ;
+                    stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                     AppSingleton.getInstance(loginActivity.this).addToRequestQueue(stringRequest,TAG);
                     /*
                     if (email.equals("admin@gmail.com") && pass.equals("admin")){

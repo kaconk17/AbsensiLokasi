@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -83,6 +84,7 @@ public class HistoryActivity extends AppCompatActivity implements RecycleAdapter
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
         tgl_awal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,10 +220,14 @@ public class HistoryActivity extends AppCompatActivity implements RecycleAdapter
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (pDialog != null){
+                    pDialog.dismiss();
+                }
                 Toast.makeText(HistoryActivity.this,error.toString(),Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppSingleton.getInstance(HistoryActivity.this).addToRequestQueue(stringRequest,TAG);
     }
     private void setupList(){

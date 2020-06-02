@@ -19,4 +19,5 @@
     <color name="white">#FFFFFF</color>
     <color name="transparan">#00FFFFFF</color>
     <color name="merah">#FF0000</color>
+    <color name="selected">#666AB6F3</color>
 </resources>

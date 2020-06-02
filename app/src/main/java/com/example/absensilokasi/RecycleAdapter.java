@@ -61,7 +61,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
         }
 
         if (selectedItem == position){
-            holder.relativeLayout.setBackgroundColor(Color.parseColor("#888888"));
+            holder.relativeLayout.setBackgroundColor(Color.parseColor("#666AB6F3"));
         }else {
             holder.relativeLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
